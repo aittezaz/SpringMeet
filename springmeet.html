@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="SpringMeet – Meet strangers in 15-minute timed conversations. Make friends all over the world. Safe, fun, real."/>
+<meta name="keywords" content="meet strangers, make friends, online chat, global friends, random chat, SpringMeet"/>
+<meta property="og:title" content="SpringMeet – Make Spring All Over the World"/>
+<meta property="og:description" content="Meet real strangers in timed 15-minute conversations. If both accept, the chat becomes permanent. Make friends worldwide."/>
+<meta property="og:type" content="website"/>
+<meta name="theme-color" content="#FF6B9D"/>
+<link rel="manifest" href="#"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+<title>SpringMeet – Make Spring All Over the World</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bloom:#FF6B9D;--blossom:#FFB347;--petal:#C084FC;--leaf:#34D399;--sky:#60A5FA;
+  --deep:#080C17;--surface:#111827;--muted:#1F2937;--card:#161D2E;
+  --glass:rgba(255,255,255,0.05);--glassh:rgba(255,255,255,0.09);
+  --border:rgba(255,255,255,0.09);--borderh:rgba(255,107,157,0.3);
+  --text:#F0F4FF;--sub:#8B95A9;--sub2:#6B7485;
+  --r:20px;--rd:14px;--rs:10px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--deep);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;line-height:1.65;min-height:100vh}
+
+/* ── ANIMATED BG ── */
+.bg-layer{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);animation:drift 20s ease-in-out infinite}
+.o1{width:700px;height:700px;background:rgba(255,107,157,0.18);top:-250px;left:-250px;animation-delay:0s}
+.o2{width:600px;height:600px;background:rgba(192,132,252,0.15);bottom:-200px;right:-200px;animation-delay:-7s}
+.o3{width:450px;height:450px;background:rgba(255,179,71,0.1);top:40%;left:35%;animation-delay:-14s}
+.o4{width:350px;height:350px;background:rgba(52,211,153,0.08);bottom:15%;left:-100px;animation-delay:-4s}
+@keyframes drift{0%,100%{transform:translate(0,0)}33%{transform:translate(70px,-50px)}66%{transform:translate(-50px,60px)}}
+
+/* ── PARTICLES ── */
+.sparks{position:fixed;inset:0;z-index:0;pointer-events:none}
+.spark{position:absolute;border-radius:50%;animation:rise linear infinite;opacity:0}
+@keyframes rise{0%{opacity:0;transform:translateY(0) scale(0)}15%{opacity:.8}85%{opacity:.15}100%{opacity:0;transform:translateY(-100vh) scale(.4)}}
+
+/* ── LAYOUT ── */
+.page{position:relative;z-index:1;display:none}
+.page.active{display:block}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+.wrap-sm{max-width:640px;margin:0 auto;padding:0 24px}
+.section{padding:90px 0}
+.section-sm{padding:60px 0}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);background:rgba(8,12,23,0.75);border-bottom:1px solid var(--border);transition:.3s}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto;padding:0 24px;height:62px}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none}
+.lmark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--bloom),var(--petal));display:flex;align-items:center;justify-content:center;font-size:16px;animation:glow 3s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(255,107,157,.4)}50%{box-shadow:0 0 0 10px rgba(255,107,157,0)}}
+.ltext{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--bloom),var(--petal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nl{color:var(--sub);text-decoration:none;padding:7px 13px;border-radius:8px;font-size:14px;font-weight:500;transition:.2s;cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif}
+.nl:hover{color:var(--text);background:var(--glass)}
+.btn-nav{background:linear-gradient(135deg,var(--bloom),var(--petal));color:#fff;border:none;padding:9px 20px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:.25s;font-family:'DM Sans',sans-serif}
+.btn-nav:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(255,107,157,.4)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none}
+.hamburger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:.3s;display:block}
+.mobile-menu{display:none;position:fixed;top:62px;left:0;right:0;z-index:199;background:rgba(8,12,23,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 24px 24px;flex-direction:column;gap:8px}
+.mobile-menu.open{display:flex}
+
+/* ── BUTTONS ── */
+.btn-p{background:linear-gradient(135deg,var(--bloom),var(--petal));color:#fff;border:none;padding:14px 28px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;transition:.25s;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(255,107,157,.45)}
+.btn-p:active{transform:translateY(0)}
+.btn-s{background:var(--glass);color:var(--text);border:1px solid var(--border);padding:14px 28px;border-radius:12px;font-size:15px;font-weight:500;cursor:pointer;transition:.25s;font-family:'DM Sans',sans-serif;backdrop-filter:blur(10px);display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+.btn-s:hover{background:var(--glassh);border-color:var(--borderh);transform:translateY(-2px)}
+.btn-g{background:transparent;color:var(--petal);border:1px solid rgba(192,132,252,.3);padding:14px 28px;border-radius:12px;font-size:15px;font-weight:500;cursor:pointer;transition:.25s;font-family:'DM Sans',sans-serif}
+.btn-g:hover{background:rgba(192,132,252,.1);transform:translateY(-2px)}
+.btn-lg{padding:16px 36px;font-size:17px;border-radius:14px}
+.btn-full{width:100%;justify-content:center}
+
+/* ── CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px;transition:.3s}
+.card:hover{border-color:var(--borderh);background:rgba(22,29,46,.9)}
+.glass-card{background:var(--glass);border:1px solid var(--border);border-radius:var(--r);backdrop-filter:blur(20px)}
+
+/* ── TYPOGRAPHY ── */
+.tag{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--bloom);font-weight:600;margin-bottom:10px;display:block}
+.h1{font-family:'Playfair Display',serif;font-size:clamp(40px,6vw,76px);font-weight:900;line-height:1.1}
+.h2{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,50px);font-weight:700;line-height:1.2}
+.h3{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:10px}
+.grad{background:linear-gradient(135deg,var(--bloom) 0%,var(--petal) 60%,var(--blossom) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sub{color:var(--sub);font-size:17px;line-height:1.8;font-weight:300}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600}
+.bp{background:rgba(255,107,157,.12);color:#FF8FB5;border:1px solid rgba(255,107,157,.22)}
+.bv{background:rgba(192,132,252,.12);color:#D0A8FF;border:1px solid rgba(192,132,252,.22)}
+.bg{background:rgba(52,211,153,.12);color:#6EE7B7;border:1px solid rgba(52,211,153,.22)}
+.ba{background:rgba(255,179,71,.12);color:#FFC97A;border:1px solid rgba(255,179,71,.22)}
+.bb{background:rgba(96,165,250,.12);color:#93C5FD;border:1px solid rgba(96,165,250,.22)}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;padding-top:80px}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,107,157,.1);border:1px solid rgba(255,107,157,.2);border-radius:100px;padding:8px 18px;font-size:13px;color:#FF8FB5;margin-bottom:28px}
+.pdot{width:7px;height:7px;border-radius:50%;background:var(--bloom);animation:pd 1.5s infinite}
+@keyframes pd{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hero-btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.hero-stats{display:flex;gap:28px;margin-top:44px;padding-top:36px;border-top:1px solid var(--border)}
+.stat-n{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;background:linear-gradient(135deg,var(--bloom),var(--petal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-l{font-size:12px;color:var(--sub2);margin-top:2px}
+
+/* ── PHONE MOCKUP ── */
+.phone-wrap{position:relative;display:flex;justify-content:center}
+.phone{width:270px;height:560px;border-radius:38px;background:linear-gradient(160deg,rgba(255,107,157,.1),rgba(192,132,252,.07));border:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:10px;backdrop-filter:blur(20px)}
+.ph-head{display:flex;align-items:center;justify-content:space-between}
+.ph-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--bloom),var(--petal));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ph-name{font-size:14px;font-weight:600;line-height:1.2}
+.ph-online{font-size:11px;color:var(--leaf);display:flex;align-items:center;gap:4px}
+.od{width:6px;height:6px;border-radius:50%;background:var(--leaf);animation:pd 1.5s infinite}
+.timer-box{background:rgba(255,107,157,.1);border:1px solid rgba(255,107,157,.2);border-radius:14px;padding:10px;text-align:center}
+.tlabel{font-size:10px;color:var(--sub2);text-transform:uppercase;letter-spacing:.08em}
+.tnum{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;background:linear-gradient(135deg,var(--bloom),var(--petal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.msgs{display:flex;flex-direction:column;gap:7px;flex:1;overflow:hidden}
+.msg{padding:9px 12px;border-radius:14px;font-size:12px;line-height:1.5;max-width:88%}
+.mi{background:rgba(255,255,255,.07);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px}
+.mo{background:linear-gradient(135deg,rgba(255,107,157,.25),rgba(192,132,252,.25));border:1px solid rgba(255,107,157,.18);align-self:flex-end;border-bottom-right-radius:4px}
+.acc-row{display:flex;gap:8px}
+.acc{flex:1;padding:11px;border-radius:11px;font-size:12px;font-weight:600;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:.2s}
+.acc-y{background:linear-gradient(135deg,var(--bloom),var(--petal));color:#fff}
+.acc-y:hover{transform:scale(1.03)}
+.acc-n{background:rgba(255,255,255,.07);color:var(--sub)}
+.fc{position:absolute;background:rgba(22,29,46,.9);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:14px;padding:11px 16px;animation:float 5s ease-in-out infinite;white-space:nowrap}
+.fc1{top:30px;right:-20px}
+.fc2{bottom:90px;left:-30px;animation-delay:-2.5s}
+.fclabel{font-size:10px;color:var(--sub2);margin-bottom:2px}
+.fcval{font-size:13px;font-weight:600}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+/* ── STEPS ── */
+.steps-row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;position:relative}
+.steps-row::before{content:'';position:absolute;top:38px;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,107,157,.25) 20%,rgba(255,107,157,.25) 80%,transparent)}
+.step{text-align:center;position:relative}
+.step-ico{width:76px;height:76px;border-radius:50%;background:rgba(255,107,157,.1);border:1px solid rgba(255,107,157,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:26px;transition:.3s;cursor:default}
+.step:hover .step-ico{background:rgba(255,107,157,.18);transform:scale(1.07)}
+.step-t{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;margin-bottom:7px}
+.step-d{font-size:12px;color:var(--sub);line-height:1.6}
+
+/* ── MODES GRID ── */
+.modes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.mode-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:26px;cursor:pointer;transition:.3s;position:relative;overflow:hidden}
+.mode-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;opacity:0;transition:.3s;border-radius:0 0 var(--r) var(--r)}
+.mode-card:hover{transform:translateY(-4px);border-color:rgba(255,107,157,.3)}
+.mode-card:hover::after{opacity:1}
+.mc1::after{background:linear-gradient(90deg,var(--bloom),var(--petal))}
+.mc2::after{background:linear-gradient(90deg,var(--petal),var(--sky))}
+.mc3::after{background:linear-gradient(90deg,var(--leaf),var(--sky))}
+.mc4::after{background:linear-gradient(90deg,var(--blossom),var(--bloom))}
+.mc5::after{background:linear-gradient(90deg,var(--sky),var(--petal))}
+.mc6::after{background:linear-gradient(90deg,var(--petal),var(--bloom))}
+.mi-icon{font-size:30px;margin-bottom:14px;display:block}
+.mi-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-bottom:7px}
+.mi-desc{font-size:12px;color:var(--sub);line-height:1.6}
+
+/* ── FEATURES ── */
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.feat-wide{grid-column:1/-1}
+.ficon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px}
+
+/* ── SAFETY ── */
+.safety-wrap{background:linear-gradient(135deg,rgba(52,211,153,.04),rgba(96,165,250,.04));border:1px solid rgba(52,211,153,.1);border-radius:28px;padding:56px}
+.safety-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.sitem{display:flex;gap:12px;padding:14px;background:rgba(52,211,153,.05);border:1px solid rgba(52,211,153,.1);border-radius:14px;margin-bottom:12px}
+.sicon{width:38px;height:38px;border-radius:10px;background:rgba(52,211,153,.15);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.stitle{font-size:13px;font-weight:600;margin-bottom:3px}
+.sdesc{font-size:12px;color:var(--sub);line-height:1.5}
+
+/* ── GLOBE ── */
+.globe-viz{position:relative;width:360px;height:360px;margin:0 auto 50px;display:flex;align-items:center;justify-content:center}
+.gring{position:absolute;border-radius:50%;border:1px dashed rgba(255,255,255,.07);animation:spin linear infinite}
+.gr1{width:100%;height:100%;animation-duration:22s}
+.gr2{width:72%;height:72%;animation-duration:15s;animation-direction:reverse}
+.gr3{width:46%;height:46%;animation-duration:9s}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.gcenter{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,rgba(255,107,157,.25),rgba(192,132,252,.25));border:1px solid rgba(255,107,157,.3);display:flex;align-items:center;justify-content:center;font-size:44px}
+.gdot{position:absolute;width:9px;height:9px;border-radius:50%;animation:pd 2s ease-in-out infinite}
+.pills-row{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin-top:16px}
+.cpill{background:var(--glass);border:1px solid var(--border);border-radius:100px;padding:7px 14px;font-size:12px;font-weight:500;backdrop-filter:blur(10px)}
+
+/* ── FAQ ── */
+.faq-list{display:flex;flex-direction:column;gap:10px}
+.faq-item{background:var(--card);border:1px solid var(--border);border-radius:var(--rd);overflow:hidden;transition:.3s}
+.faq-item:hover{border-color:rgba(255,107,157,.2)}
+.faq-q{padding:17px 20px;font-size:14px;font-weight:500;display:flex;justify-content:space-between;align-items:center;gap:14px;cursor:pointer;user-select:none}
+.faq-ico{font-size:18px;color:var(--bloom);transition:.3s;flex-shrink:0}
+.faq-a{max-height:0;overflow:hidden;transition:.4s ease;font-size:13px;color:var(--sub);line-height:1.75}
+.faq-item.open .faq-a{max-height:200px;padding:0 20px 17px}
+.faq-item.open .faq-ico{transform:rotate(45deg)}
+
+/* ── CONTACT ── */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.contact-item{display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--card);border:1px solid var(--border);border-radius:var(--rd);margin-bottom:12px;text-decoration:none;transition:.3s;color:var(--text)}
+.contact-item:hover{border-color:var(--borderh);transform:translateX(4px)}
+.ci-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ci-label{font-size:11px;color:var(--sub2);margin-bottom:2px}
+.ci-val{font-size:14px;font-weight:500}
+
+/* ── CONTACT FORM ── */
+.form-group{margin-bottom:18px}
+label{display:block;font-size:13px;font-weight:500;margin-bottom:7px;color:var(--sub)}
+input,textarea,select{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:var(--rs);padding:12px 16px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;transition:.2s;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--bloom);background:rgba(255,107,157,.05)}
+textarea{resize:vertical;min-height:110px}
+.form-msg{padding:12px 16px;border-radius:var(--rs);font-size:13px;margin-top:12px;display:none}
+.form-ok{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.2);color:#6EE7B7}
+.form-err{background:rgba(255,107,157,.1);border:1px solid rgba(255,107,157,.2);color:#FF8FB5}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:36px;max-width:480px;width:100%;position:relative;animation:modalin .3s ease}
+@keyframes modalin{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.modal-close{position:absolute;top:16px;right:16px;background:var(--glass);border:none;color:var(--sub);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.2s}
+.modal-close:hover{background:var(--glassh);color:var(--text)}
+
+/* ── CHAT DEMO ── */
+.chat-demo{background:var(--surface);border:1px solid var(--border);border-radius:24px;overflow:hidden;max-width:680px;margin:0 auto}
+.cd-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);background:rgba(255,107,157,.04)}
+.cd-user{display:flex;align-items:center;gap:12px}
+.cd-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--bloom),var(--petal));display:flex;align-items:center;justify-content:center;font-size:17px}
+.cd-name{font-size:14px;font-weight:600}
+.cd-loc{font-size:12px;color:var(--sub);display:flex;align-items:center;gap:4px}
+.cd-timer{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--bloom),var(--petal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cd-msgs{padding:20px;display:flex;flex-direction:column;gap:10px;min-height:280px}
+.cd-msg{padding:10px 14px;border-radius:16px;font-size:13px;max-width:78%;line-height:1.6}
+.cd-in{background:rgba(255,255,255,.07);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px}
+.cd-out{background:linear-gradient(135deg,rgba(255,107,157,.25),rgba(192,132,252,.22));border:1px solid rgba(255,107,157,.18);align-self:flex-end;border-bottom-right-radius:4px}
+.cd-meta{font-size:10px;color:var(--sub2);margin-top:3px;display:flex;align-items:center;gap:3px}
+.typing{display:flex;align-items:center;gap:5px;padding:10px 14px;background:rgba(255,255,255,.05);border-radius:16px;border-bottom-left-radius:4px;align-self:flex-start;width:64px}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--sub);animation:blink 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,60%,100%{opacity:.3}30%{opacity:1}}
+.cd-input{display:flex;gap:10px;padding:14px 20px;border-top:1px solid var(--border);align-items:flex-end}
+.cd-input input{flex:1;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:12px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none}
+.cd-input input:focus{border-color:var(--bloom)}
+.cd-send{background:linear-gradient(135deg,var(--bloom),var(--petal));border:none;border-radius:10px;width:38px;height:38px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s}
+.cd-send:hover{transform:scale(1.08)}
+.cd-acc{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:10px;background:rgba(255,107,157,.03)}
+.cd-acc-btn{flex:1;padding:11px;border-radius:11px;font-size:13px;font-weight:600;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:.2s}
+.cab-y{background:linear-gradient(135deg,var(--bloom),var(--petal));color:#fff}
+.cab-y:hover{transform:scale(1.02)}
+.cab-n{background:rgba(255,255,255,.07);color:var(--sub);border:1px solid var(--border)}
+.match-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:420px;gap:16px;text-align:center;padding:40px}
+.match-anim{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--bloom),var(--petal));display:flex;align-items:center;justify-content:center;font-size:36px;animation:glow 2s ease-in-out infinite}
+.conn-line{display:flex;align-items:center;gap:0;margin:8px 0}
+.conn-dot{width:12px;height:12px;border-radius:50%;background:var(--bloom)}
+.conn-bar{width:100px;height:2px;background:linear-gradient(90deg,var(--bloom),var(--petal))}
+.conn-dot2{width:12px;height:12px;border-radius:50%;background:var(--petal)}
+
+/* ── SIGNUP/LOGIN ── */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:90px 24px 40px}
+.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:28px;padding:44px;width:100%;max-width:460px}
+.auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:32px;justify-content:center}
+.auth-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-bottom:8px;text-align:center}
+.auth-sub{font-size:14px;color:var(--sub);text-align:center;margin-bottom:32px}
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--sub2);font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.auth-link{color:var(--bloom);text-decoration:none;font-weight:500;cursor:pointer}
+.auth-link:hover{text-decoration:underline}
+.strength-bar{height:4px;border-radius:2px;background:var(--muted);margin-top:6px;overflow:hidden}
+.strength-fill{height:100%;border-radius:2px;transition:.3s;width:0%}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.checkbox-row{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--sub)}
+.checkbox-row input[type=checkbox]{width:16px;height:16px;margin-top:2px;accent-color:var(--bloom);flex-shrink:0}
+
+/* ── QUEUE ── */
+.queue-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 24px}
+.queue-card{background:var(--surface);border:1px solid var(--border);border-radius:28px;padding:56px;text-align:center;max-width:520px;width:100%}
+.queue-ring{width:120px;height:120px;border-radius:50%;border:2px solid rgba(255,107,157,.2);border-top-color:var(--bloom);animation:spin .8s linear infinite;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;position:relative}
+.queue-ring::after{content:'🌸';position:absolute;font-size:36px;animation:counter-spin .8s linear infinite}
+@keyframes counter-spin{from{transform:rotate(0)}to{transform:rotate(-360deg)}}
+.mode-picker{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:28px 0}
+.mp{background:var(--card);border:1px solid var(--border);border-radius:var(--rd);padding:16px 12px;cursor:pointer;transition:.25s;text-align:center;font-size:13px;font-weight:500}
+.mp:hover,.mp.sel{border-color:var(--bloom);background:rgba(255,107,157,.08);color:var(--bloom)}
+.mp span{display:block;font-size:20px;margin-bottom:6px}
+
+/* ── PROFILE PAGE ── */
+.profile-wrap{padding:90px 0 60px}
+.profile-header{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:32px;margin-bottom:24px;display:flex;align-items:center;gap:24px}
+.profile-av{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--bloom),var(--petal));display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0}
+.profile-name{font-family:'Playfair Display',serif;font-size:24px;font-weight:700}
+.profile-meta{font-size:13px;color:var(--sub);margin-top:4px}
+.profile-tabs{display:flex;gap:8px;border-bottom:1px solid var(--border);margin-bottom:24px}
+.ptab{padding:10px 18px;font-size:14px;font-weight:500;cursor:pointer;color:var(--sub);border-bottom:2px solid transparent;transition:.2s;background:none;border-top:none;border-left:none;border-right:none;font-family:'DM Sans',sans-serif}
+.ptab.active,.ptab:hover{color:var(--text);border-bottom-color:var(--bloom)}
+.settings-section{background:var(--card);border:1px solid var(--border);border-radius:var(--rd);padding:24px;margin-bottom:16px}
+.ss-title{font-size:15px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.toggle-row:last-child{border-bottom:none}
+.tl{font-size:13px;color:var(--sub)}
+.toggle{width:42px;height:24px;border-radius:12px;background:var(--muted);border:none;cursor:pointer;position:relative;transition:.3s;flex-shrink:0}
+.toggle::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.3s}
+.toggle.on{background:var(--bloom)}
+.toggle.on::after{left:21px}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:44px 0}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand p{font-size:13px;color:var(--sub);margin-top:12px;line-height:1.7;max-width:240px}
+.footer-col h4{font-size:13px;font-weight:600;margin-bottom:16px;color:var(--sub2);text-transform:uppercase;letter-spacing:.08em}
+.footer-col a{display:block;font-size:13px;color:var(--sub);text-decoration:none;margin-bottom:9px;transition:.2s;cursor:pointer}
+.footer-col a:hover{color:var(--text)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:28px;border-top:1px solid var(--border);font-size:12px;color:var(--sub2)}
+.footer-socials{display:flex;gap:10px}
+.fsoc{width:34px;height:34px;border-radius:8px;background:var(--glass);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:.2s;text-decoration:none}
+.fsoc:hover{background:var(--glassh);border-color:var(--borderh)}
+
+/* ── NOTIF TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid rgba(52,211,153,.3);border-radius:14px;padding:14px 20px;font-size:14px;color:var(--text);z-index:1000;animation:toastin .3s ease;display:none;max-width:320px;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.toast.show{display:flex;align-items:center;gap:10px}
+@keyframes toastin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── SCROLL REVEAL ── */
+.rv{opacity:0;transform:translateY(36px);transition:opacity .7s ease,transform .7s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+
+/* ── UTILS ── */
+.center{text-align:center}
+.mt4{margin-top:16px}
+.mt8{margin-top:32px}
+.mb4{margin-bottom:16px}
+.mb8{margin-bottom:32px}
+.gap-v{display:flex;flex-direction:column;gap:12px}
+.sep{border:none;border-top:1px solid var(--border);margin:32px 0}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .hero-grid{grid-template-columns:1fr;text-align:center}
+  .phone-wrap{order:-1}
+  .hero-stats{justify-content:center}
+  .hero-badge{justify-content:center}
+  .hero-btns{justify-content:center}
+  .modes-grid{grid-template-columns:1fr 1fr}
+  .steps-row{grid-template-columns:1fr 1fr}
+  .steps-row::before{display:none}
+  .feat-grid{grid-template-columns:1fr}
+  .feat-wide{grid-column:auto}
+  .safety-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:28px}
+  .footer-brand{grid-column:1/-1}
+  .footer-bottom{flex-direction:column;gap:16px;text-align:center}
+  nav .nav-links{display:none}
+  .hamburger{display:flex}
+}
+@media(max-width:600px){
+  .modes-grid{grid-template-columns:1fr}
+  .steps-row{grid-template-columns:1fr}
+  .safety-wrap{padding:32px 24px}
+  .auth-card{padding:28px 20px}
+  .queue-card{padding:36px 20px}
+  .wrap{padding:0 16px}
+  .section{padding:64px 0}
+  .input-row{grid-template-columns:1fr}
+  .mode-picker{grid-template-columns:1fr 1fr}
+  .footer-grid{grid-template-columns:1fr}
+  .chat-demo{border-radius:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- BG -->
+<div class="bg-layer">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="orb o4"></div>
+</div>
+<div class="sparks" id="sparks"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ <span id="toast-msg">Done!</span></div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-inner">
+    <div class="logo" onclick="showPage('home')">
+      <div class="lmark">🌸</div>
+      <span class="ltext">SpringMeet</span>
+    </div>
+    <div class="nav-links">
+      <button class="nl" onclick="scrollTo('#how')">How it works</button>
+      <button class="nl" onclick="scrollTo('#modes')">Modes</button>
+      <button class="nl" onclick="scrollTo('#safety')">Safety</button>
+      <button class="nl" onclick="showPage('contact')">Contact</button>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <button class="nl" onclick="showPage('login')">Sign in</button>
+      <button class="btn-nav" onclick="showPage('signup')">Join Free 🌸</button>
+    </div>
+    <button class="hamburger" id="burger" onclick="toggleMobile()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="nl" style="text-align:left" onclick="scrollTo('#how');closeMobile()">How it works</button>
+  <button class="nl" style="text-align:left" onclick="scrollTo('#modes');closeMobile()">Modes</button>
+  <button class="nl" style="text-align:left" onclick="scrollTo('#safety');closeMobile()">Safety</button>
+  <button class="nl" style="text-align:left" onclick="showPage('contact');closeMobile()">Contact</button>
+  <hr style="border-color:var(--border)"/>
+  <button class="nl" style="text-align:left" onclick="showPage('login');closeMobile()">Sign in</button>
+  <button class="btn-p btn-full" onclick="showPage('signup');closeMobile()">Join Free 🌸</button>
+</div>
+
+<!-- ═══ HOME PAGE ═══ -->
+<div class="page active" id="pg-home">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-badge"><div class="pdot"></div>2,400+ live conversations right now</div>
+        <h1 class="h1" style="margin-bottom:20px">Make spring<br><span class="grad">all over</span><br>the world.</h1>
+        <p class="sub" style="max-width:460px">Meet a real stranger in a 15-minute timed conversation. If you both feel the spark — the chat becomes permanent. If not — it disappears. No pressure, pure magic.</p>
+        <div class="hero-btns">
+          <button class="btn-p btn-lg" onclick="showPage('queue')">🌸 Meet a Stranger</button>
+          <button class="btn-s btn-lg" onclick="showPage('signup')">💫 Find a Soulmate</button>
+          <button class="btn-g btn-lg" onclick="showPage('chat-demo')">⚡ Try a Demo Chat</button>
+        </div>
+        <div class="hero-stats">
+          <div><div class="stat-n">140+</div><div class="stat-l">Countries</div></div>
+          <div><div class="stat-n">2M+</div><div class="stat-l">Conversations</div></div>
+          <div><div class="stat-n">68%</div><div class="stat-l">Mutual Accept Rate</div></div>
+          <div><div class="stat-n">18+</div><div class="stat-l">Age Verified</div></div>
+        </div>
+      </div>
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="ph-head">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="ph-av">🦋</div>
+              <div>
+                <div class="ph-name">Luna, 24 · Amsterdam</div>
+                <div class="ph-online"><div class="od"></div>Online now</div>
+              </div>
+            </div>
+            <span style="font-size:18px">✨</span>
+          </div>
+          <div class="timer-box">
+            <div class="tlabel">Session ends in</div>
+            <div class="tnum" id="heroTimer">12:34</div>
+          </div>
+          <div class="msgs">
+            <div class="msg mi">Hey! Favourite season and why? 🍂</div>
+            <div class="msg mo">Autumn — everything slows down like the world takes a breath 🌿</div>
+            <div class="msg mi">That's the most poetic thing I've heard all week 😭</div>
+            <div class="msg mo">Haha I'm usually awkward but this feels different!</div>
+            <div class="msg mi">Same 🥺 Should we accept each other? 👀</div>
+            <div class="typing"><span></span><span></span><span></span></div>
+          </div>
+          <div class="acc-row">
+            <button class="acc acc-y" onclick="showToast('💌 Mutual accept! Moving to inbox...')">❤️ Accept</button>
+            <button class="acc acc-n">Skip</button>
+          </div>
+        </div>
+        <div class="fc fc1"><div class="fclabel">Match found</div><div class="fcval" style="color:var(--leaf)">✓ Both accepted!</div></div>
+        <div class="fc fc2"><div class="fclabel">Spark started</div><div class="fcval" style="color:var(--bloom)">🔥 15 min timer</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section rv" id="how">
+  <div class="wrap">
+    <div class="center mb8">
+      <span class="tag">The magic</span>
+      <h2 class="h2" style="margin-bottom:14px">How SpringMeet works</h2>
+      <p class="sub">Four steps. Fifteen minutes. Possibly a friendship that lasts a lifetime.</p>
+    </div>
+    <div class="steps-row">
+      <div class="step">
+        <div class="step-ico">👤</div>
+        <div class="step-t">Create your profile</div>
+        <div class="step-d">Set your vibe, interests, and conversation style. Completely free — no card needed.</div>
+      </div>
+      <div class="step">
+        <div class="step-ico">🎯</div>
+        <div class="step-t">Pick your mode</div>
+        <div class="step-d">Deep talk, friendship, soulmate search, or pure random fun. You choose the energy.</div>
+      </div>
+      <div class="step">
+        <div class="step-ico">⏱️</div>
+        <div class="step-t">15-minute spark</div>
+        <div class="step-d">The countdown creates beautiful pressure. Be real. Be yourself. No time for pretending.</div>
+      </div>
+      <div class="step">
+        <div class="step-ico">💌</div>
+        <div class="step-t">Mutual accept</div>
+        <div class="step-d">Both say yes? The chat moves to your inbox — permanently. Meet next stranger if not.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODES -->
+<section class="section rv" id="modes">
+  <div class="wrap">
+    <span class="tag">Conversation modes</span>
+    <h2 class="h2" style="margin-bottom:12px">Find your kind of spark</h2>
+    <p class="sub" style="margin-bottom:48px;max-width:500px">Every conversation deserves the right energy. Pick your vibe and dive in.</p>
+    <div class="modes-grid">
+      <div class="mode-card mc1" onclick="showPage('queue')">
+        <span class="mi-icon">🌹</span>
+        <div class="mi-name">Find a Soulmate</div>
+        <div class="mi-desc">For those ready to meet someone who might change their life. Thoughtful, real, electric.</div>
+        <div style="margin-top:12px"><span class="badge bp">Most popular</span></div>
+      </div>
+      <div class="mode-card mc2" onclick="showPage('queue')">
+        <span class="mi-icon">🌊</span>
+        <div class="mi-name">Deep Talk</div>
+        <div class="mi-desc">Skip small talk. Jump straight into life, meaning, dreams, and the things that matter.</div>
+        <div style="margin-top:12px"><span class="badge bv">Trending</span></div>
+      </div>
+      <div class="mode-card mc3" onclick="showPage('queue')">
+        <span class="mi-icon">🌱</span>
+        <div class="mi-name">Friendship Mode</div>
+        <div class="mi-desc">No romance. Just warm, genuine human connection across borders and cultures.</div>
+        <div style="margin-top:12px"><span class="badge bg">Wholesome</span></div>
+      </div>
+      <div class="mode-card mc4" onclick="showPage('queue')">
+        <span class="mi-icon">🎲</span>
+        <div class="mi-name">Fun &amp; Random</div>
+        <div class="mi-desc">Chaos energy. Weird conversations, debates, shared playlists — whatever happens, happens.</div>
+        <div style="margin-top:12px"><span class="badge ba">Wild</span></div>
+      </div>
+      <div class="mode-card mc5" onclick="showPage('queue')">
+        <span class="mi-icon">🌍</span>
+        <div class="mi-name">Make Spring Worldwide</div>
+        <div class="mi-desc">Connect across cultures. Real-time translation so every language becomes a bridge.</div>
+        <div style="margin-top:12px"><span class="badge bb">Global</span></div>
+      </div>
+      <div class="mode-card mc6" onclick="showPage('queue')">
+        <span class="mi-icon">🔮</span>
+        <div class="mi-name">AI Icebreaker Mode</div>
+        <div class="mi-desc">Let our AI spark the first question — a weird prompt, a mini game, a secret topic. Magic.</div>
+        <div style="margin-top:12px"><span class="badge bv">New ✨</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO CHAT -->
+<section class="section rv" id="demo">
+  <div class="wrap">
+    <div class="center mb8">
+      <span class="tag">Try it now</span>
+      <h2 class="h2" style="margin-bottom:14px">See how a conversation feels</h2>
+      <p class="sub">Type something and experience SpringMeet — no sign-up needed for this preview.</p>
+    </div>
+    <div class="chat-demo" id="chatDemoWidget">
+      <div class="cd-header">
+        <div class="cd-user">
+          <div class="cd-av">🌿</div>
+          <div>
+            <div class="cd-name">Kai · Seoul, South Korea</div>
+            <div class="cd-loc">🌏 Online · 23 years old · Friendship Mode</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--sub2);text-align:center;margin-bottom:2px">Session ends in</div>
+          <div class="cd-timer" id="demoTimer">14:52</div>
+        </div>
+      </div>
+      <div class="cd-msgs" id="demoMsgs">
+        <div class="cd-msg cd-in">Hey! I'm Kai from Seoul 👋 What's something you're genuinely passionate about?<div class="cd-meta">12:03 · ✓✓</div></div>
+      </div>
+      <div class="cd-input">
+        <input id="demoInput" type="text" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendDemoMsg()"/>
+        <button class="cd-send" onclick="sendDemoMsg()">➤</button>
+      </div>
+      <div class="cd-acc">
+        <button class="cd-acc-btn cab-y" onclick="demoAccept()">❤️ Accept Kai</button>
+        <button class="cd-acc-btn cab-n" onclick="demoSkip()">Skip & Meet Next →</button>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:12px;color:var(--sub2);margin-top:16px">This is a demo. Sign up to meet real people from around the world. 🌸</p>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section rv">
+  <div class="wrap">
+    <span class="tag">What's inside</span>
+    <h2 class="h2" style="margin-bottom:12px">Built for real connection</h2>
+    <p class="sub" style="margin-bottom:48px;max-width:500px">Every feature is designed to make those 15 minutes count.</p>
+    <div class="feat-grid">
+      <div class="card">
+        <div class="ficon" style="background:rgba(255,107,157,.15)">⏱️</div>
+        <h3 class="h3">Timed Conversations</h3>
+        <p style="font-size:13px;color:var(--sub);line-height:1.7">The countdown creates just enough pressure to be real. 15 minutes to show who you are — no more, no less.</p>
+      </div>
+      <div class="card">
+        <div class="ficon" style="background:rgba(192,132,252,.15)">🤝</div>
+        <h3 class="h3">Mutual Acceptance</h3>
+        <p style="font-size:13px;color:var(--sub);line-height:1.7">Both of you must say yes. When it's mutual, it means everything — and the conversation moves to your inbox forever.</p>
+      </div>
+      <div class="card">
+        <div class="ficon" style="background:rgba(52,211,153,.15)">📞</div>
+        <h3 class="h3">Voice &amp; Video Calls</h3>
+        <p style="font-size:13px;color:var(--sub);line-height:1.7">After mutual acceptance, upgrade to a real call. High-quality, private. The other person must accept — always consensual.</p>
+      </div>
+      <div class="card">
+        <div class="ficon" style="background:rgba(96,165,250,.15)">🌐</div>
+        <h3 class="h3">Live Translation</h3>
+        <p style="font-size:13px;color:var(--sub);line-height:1.7">Talking to someone from Japan, Turkey, or Peru? Real-time translation bridges every language barrier instantly.</p>
+      </div>
+      <div class="card feat-wide">
+        <div style="display:grid;grid-template-columns:1fr 2fr;gap:32px;align-items:center">
+          <div>
+            <div class="ficon" style="background:rgba(255,107,157,.15)">💌</div>
+            <h3 class="h3">Permanent Inbox</h3>
+            <p style="font-size:13px;color:var(--sub);line-height:1.7">Accepted conversations live in your inbox forever. Continue where you left off. Call. Share. Grow the connection.</p>
+          </div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:16px;padding:20px">
+            <div style="font-size:11px;color:var(--sub2);margin-bottom:14px;text-transform:uppercase;letter-spacing:.08em">Your Inbox</div>
+            <div class="gap-v">
+              <div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;background:rgba(255,107,157,.07)">
+                <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--bloom),var(--petal));display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">🦋</div>
+                <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600">Luna · Amsterdam</div><div style="font-size:12px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">The way everything slows down...</div></div>
+                <div style="font-size:11px;color:var(--bloom);flex-shrink:0">2m</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px">
+                <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--petal),var(--sky));display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">🌿</div>
+                <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600">Kai · Seoul</div><div style="font-size:12px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Are you free to call tonight?</div></div>
+                <div style="font-size:11px;color:var(--sub2);flex-shrink:0">1h</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px">
+                <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--leaf),var(--blossom));display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">🌸</div>
+                <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600">Zara · Cairo</div><div style="font-size:12px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">I've been thinking about what you said...</div></div>
+                <div style="font-size:11px;color:var(--sub2);flex-shrink:0">2d</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SAFETY -->
+<section class="section rv" id="safety">
+  <div class="wrap">
+    <div class="safety-wrap">
+      <div class="safety-grid">
+        <div>
+          <span class="tag" style="color:var(--leaf)">Safety first</span>
+          <h2 class="h2" style="margin-bottom:16px">A safe space to be real</h2>
+          <p style="color:var(--sub);font-size:15px;line-height:1.8;margin-bottom:24px">SpringMeet is strictly 18+. Every session is protected by AI moderation, community trust systems, and a dedicated human moderation team.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span class="badge bg">🛡️ AI Moderation</span>
+            <span class="badge bg">⚠️ 3-Strike System</span>
+            <span class="badge bg">🚫 Instant Block</span>
+            <span class="badge bg">👁️ Human Review</span>
+          </div>
+          <div style="margin-top:28px;padding:20px;background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.12);border-radius:14px">
+            <div style="font-size:13px;font-weight:600;margin-bottom:8px">🔒 Privacy promise</div>
+            <p style="font-size:12px;color:var(--sub);line-height:1.7">Expired chats are fully deleted — no archive, no trace. Accepted chats are stored securely only for the people involved. We never sell your data.</p>
+          </div>
+        </div>
+        <div>
+          <div class="sitem">
+            <div class="sicon">🤖</div>
+            <div><div class="stitle">Real-time AI moderation</div><div class="sdesc">Every message scanned for toxicity, threats, and harassment — flagged before it's even seen.</div></div>
+          </div>
+          <div class="sitem">
+            <div class="sicon">📊</div>
+            <div><div class="stitle">Three-strike warning system</div><div class="sdesc">First warning. Second warning. Third offense: suspension or permanent ban.</div></div>
+          </div>
+          <div class="sitem">
+            <div class="sicon">🗑️</div>
+            <div><div class="stitle">Expired chats vanish</div><div class="sdesc">No mutual accept = conversation deleted completely. No logs, no archives, no trace.</div></div>
+          </div>
+          <div class="sitem">
+            <div class="sicon">🌍</div>
+            <div><div class="stitle">Human moderation team</div><div class="sdesc">Reports reviewed by real people. Full admin oversight of abuse trends 24/7.</div></div>
+          </div>
+          <div class="sitem">
+            <div class="sicon">🚫</div>
+            <div><div class="stitle">Permanent block system</div><div class="sdesc">Block anyone instantly. Blocked users are permanently excluded from your matching queue.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GLOBAL -->
+<section class="section rv center">
+  <div class="wrap">
+    <span class="tag">Community</span>
+    <h2 class="h2" style="margin-bottom:14px">Spring is spreading worldwide</h2>
+    <p class="sub" style="margin:0 auto 40px;max-width:480px">People from over 140 countries have already joined the conversation. Where are you from?</p>
+    <div class="globe-viz">
+      <div class="gring gr1"></div><div class="gring gr2"></div><div class="gring gr3"></div>
+      <div class="gcenter">🌍</div>
+      <div class="gdot" style="background:var(--bloom);top:12%;left:28%"></div>
+      <div class="gdot" style="background:var(--petal);top:65%;right:18%;animation-delay:.5s"></div>
+      <div class="gdot" style="background:var(--leaf);bottom:22%;left:18%;animation-delay:1s"></div>
+      <div class="gdot" style="background:var(--blossom);top:38%;right:8%;animation-delay:1.5s"></div>
+      <div class="gdot" style="background:var(--sky);top:22%;right:32%;animation-delay:.8s"></div>
+      <div class="gdot" style="background:var(--bloom);bottom:35%;right:25%;animation-delay:1.2s"></div>
+    </div>
+    <div class="pills-row">
+      <div class="cpill">🇺🇸 USA</div><div class="cpill">🇯🇵 Japan</div><div class="cpill">🇧🇷 Brazil</div>
+      <div class="cpill">🇩🇪 Germany</div><div class="cpill">🇮🇳 India</div><div class="cpill">🇿🇦 South Africa</div>
+      <div class="cpill">🇵🇰 Pakistan</div><div class="cpill">🇰🇷 South Korea</div><div class="cpill">🇸🇦 Saudi Arabia</div>
+      <div class="cpill">🇹🇷 Turkey</div><div class="cpill">🇲🇽 Mexico</div><div class="cpill">🇦🇺 Australia</div>
+      <div class="cpill">🇳🇬 Nigeria</div><div class="cpill">🇫🇷 France</div><div class="cpill">+ 126 more 🌸</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section rv">
+  <div class="wrap-sm">
+    <div class="center mb8">
+      <span class="tag">Questions</span>
+      <h2 class="h2">Frequently asked</h2>
+    </div>
+    <div class="faq-list" id="faq">
+      <div class="faq-item"><div class="faq-q">What if only one person accepts?<span class="faq-ico">+</span></div><div class="faq-a">If only one person taps Accept, they see "Waiting for the other person…" — and wait until either the other accepts or the timer runs out. If time expires without mutual acceptance, the conversation disappears completely from both sides.</div></div>
+      <div class="faq-item"><div class="faq-q">Are expired chats really deleted?<span class="faq-ico">+</span></div><div class="faq-a">Yes. When a session expires without mutual acceptance, all messages are permanently deleted and hidden from both users. No archive, no history. This is by design — it removes pressure and protects privacy.</div></div>
+      <div class="faq-item"><div class="faq-q">Is SpringMeet safe for 18+ adults?<span class="faq-ico">+</span></div><div class="faq-a">SpringMeet is strictly 18+ only. We require age confirmation and Terms of Service acceptance during sign-up, use AI moderation on every message, have a human moderation team, a three-strike warning system, and instant block/report features.</div></div>
+      <div class="faq-item"><div class="faq-q">Can I control who I match with?<span class="faq-ico">+</span></div><div class="faq-a">By default, matching is global and random — that's where the magic happens. You can optionally filter by language, region, interests, and conversation vibe. Blocked users are permanently excluded from your queue.</div></div>
+      <div class="faq-item"><div class="faq-q">How do calls work after acceptance?<span class="faq-ico">+</span></div><div class="faq-a">After mutual acceptance, you can initiate voice or video calls from your inbox at any time. The other person must accept the call request. All calls use encrypted WebRTC — private and peer-to-peer where possible.</div></div>
+      <div class="faq-item"><div class="faq-q">Is SpringMeet free?<span class="faq-ico">+</span></div><div class="faq-a">The core experience is completely free — matching, chatting, inbox, and calls. Premium features like boosted matching priority, extra filters, and profile themes are planned for the future, but the heart of SpringMeet will always be free.</div></div>
+      <div class="faq-item"><div class="faq-q">What happens to my data?<span class="faq-ico">+</span></div><div class="faq-a">We never sell your data to anyone. Expired chats are deleted. Accepted chats are stored securely only for the people involved. You can delete your account and all associated data at any time from Settings.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section rv center">
+  <div class="wrap">
+    <div style="font-size:56px;margin-bottom:20px">🌸</div>
+    <h2 class="h2" style="margin-bottom:14px">Your next 15 minutes<br>could <span class="grad">change everything.</span></h2>
+    <p class="sub" style="margin:0 auto 40px;max-width:440px">Over 2,400 people are in the queue right now. Someone is waiting to meet you.</p>
+    <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:14px">
+      <button class="btn-p btn-lg" onclick="showPage('signup')">🌸 Start for Free</button>
+      <button class="btn-s btn-lg" onclick="showPage('contact')">💬 Contact Us</button>
+    </div>
+    <p style="margin-top:20px;font-size:12px;color:var(--sub2)">No credit card. No obligations. 18+ only. Made with 🌸 by Aittezaz Ahmad.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo" onclick="showPage('home')" style="margin-bottom:0">
+          <div class="lmark">🌸</div><span class="ltext">SpringMeet</span>
+        </div>
+        <p>Make spring all over the world. Connect with real strangers in 15-minute timed conversations. 140+ countries. Real connections. Always safe.</p>
+        <div class="footer-socials" style="margin-top:16px">
+          <a class="fsoc" href="mailto:aittezazahmad@gmail.com" title="Email">📧</a>
+          <a class="fsoc" href="tel:+923419098201" title="Phone">📞</a>
+          <div class="fsoc">🐦</div>
+          <div class="fsoc">📸</div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a onclick="showPage('queue')">Meet a Stranger</a>
+        <a onclick="scrollTo('#modes')">Conversation Modes</a>
+        <a onclick="scrollTo('#how')">How it Works</a>
+        <a onclick="showPage('chat-demo')">Demo Chat</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a onclick="showPage('contact')">Contact Us</a>
+        <a onclick="showPage('about')">About</a>
+        <a onclick="showPage('safety-page')">Safety Center</a>
+        <a>Blog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a onclick="showPage('privacy')">Privacy Policy</a>
+        <a onclick="showPage('terms')">Terms of Service</a>
+        <a>Cookie Policy</a>
+        <a>GDPR</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2025 SpringMeet. Built by Aittezaz Ahmad. All rights reserved.</div>
+      <div>🌸 Making the world a little more springy, one conversation at a time.</div>
+    </div>
+  </div>
+</footer>
+
+</div><!-- end home -->
+
+<!-- ═══ SIGNUP PAGE ═══ -->
+<div class="page" id="pg-signup">
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-logo" onclick="showPage('home')" style="cursor:pointer">
+      <div class="lmark">🌸</div><span class="ltext">SpringMeet</span>
+    </div>
+    <h1 class="auth-title">Create your account</h1>
+    <p class="auth-sub">Join 2M+ people making connections worldwide 🌍</p>
+    <div class="input-row">
+      <div class="form-group"><label>First Name</label><input type="text" placeholder="Aittezaz" id="su-fname"/></div>
+      <div class="form-group"><label>Username</label><input type="text" placeholder="@springlover" id="su-uname"/></div>
+    </div>
+    <div class="form-group"><label>Email Address</label><input type="email" placeholder="you@example.com" id="su-email"/></div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" placeholder="Create a strong password" id="su-pass" oninput="checkStrength(this.value)"/>
+      <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+      <div style="font-size:11px;color:var(--sub2);margin-top:4px" id="strengthLabel">Enter password</div>
+    </div>
+    <div class="form-group"><label>Confirm Password</label><input type="password" placeholder="Repeat password" id="su-pass2"/></div>
+    <div class="form-group">
+      <label>Date of Birth</label>
+      <input type="date" id="su-dob"/>
+      <div style="font-size:11px;color:var(--sub2);margin-top:4px">You must be 18+ to use SpringMeet</div>
+    </div>
+    <div class="form-group">
+      <label>Country</label>
+      <select id="su-country">
+        <option value="">Select your country</option>
+        <option>Pakistan</option><option>United States</option><option>United Kingdom</option><option>India</option><option>Japan</option><option>Germany</option><option>Brazil</option><option>South Korea</option><option>Turkey</option><option>Saudi Arabia</option><option>South Africa</option><option>Nigeria</option><option>Australia</option><option>Canada</option><option>France</option><option>Other</option>
+      </select>
+    </div>
+    <div class="checkbox-row" style="margin-bottom:12px">
+      <input type="checkbox" id="cb-tos"/>
+      <label for="cb-tos">I am 18+ years old and I agree to the <span class="auth-link" onclick="showPage('terms')">Terms of Service</span> and <span class="auth-link" onclick="showPage('privacy')">Privacy Policy</span></label>
+    </div>
+    <div class="checkbox-row" style="margin-bottom:20px">
+      <input type="checkbox" id="cb-safe"/>
+      <label for="cb-safe">I agree to use SpringMeet responsibly and respect other users</label>
+    </div>
+    <button class="btn-p btn-full" onclick="doSignup()">🌸 Create Account</button>
+    <div class="form-msg" id="su-msg"></div>
+    <p style="text-align:center;margin-top:20px;font-size:13px;color:var(--sub)">Already have an account? <span class="auth-link" onclick="showPage('login')">Sign in</span></p>
+  </div>
+</div>
+</div>
+
+<!-- ═══ LOGIN PAGE ═══ -->
+<div class="page" id="pg-login">
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-logo" onclick="showPage('home')" style="cursor:pointer">
+      <div class="lmark">🌸</div><span class="ltext">SpringMeet</span>
+    </div>
+    <h1 class="auth-title">Welcome back 🌸</h1>
+    <p class="auth-sub">Sign in to continue meeting amazing people worldwide</p>
+    <div class="form-group"><label>Email Address</label><input type="email" placeholder="you@example.com" id="li-email"/></div>
+    <div class="form-group"><label>Password</label><input type="password" placeholder="Your password" id="li-pass"/></div>
+    <div style="text-align:right;margin:-10px 0 20px"><span class="auth-link" onclick="showPage('forgot')" style="font-size:13px">Forgot password?</span></div>
+    <button class="btn-p btn-full" onclick="doLogin()">Sign In →</button>
+    <div class="form-msg" id="li-msg"></div>
+    <div class="divider">or continue with</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+      <button class="btn-s" style="justify-content:center;font-size:13px;padding:11px" onclick="showToast('Google login coming soon!')">🔵 Google</button>
+      <button class="btn-s" style="justify-content:center;font-size:13px;padding:11px" onclick="showToast('Apple login coming soon!')">⚫ Apple</button>
+    </div>
+    <p style="text-align:center;font-size:13px;color:var(--sub)">Don't have an account? <span class="auth-link" onclick="showPage('signup')">Join free</span></p>
+  </div>
+</div>
+</div>
+
+<!-- ═══ FORGOT PASSWORD ═══ -->
+<div class="page" id="pg-forgot">
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-logo" onclick="showPage('home')" style="cursor:pointer">
+      <div class="lmark">🌸</div><span class="ltext">SpringMeet</span>
+    </div>
+    <h1 class="auth-title">Reset password</h1>
+    <p class="auth-sub">Enter your email and we'll send you a reset link</p>
+    <div class="form-group"><label>Email Address</label><input type="email" placeholder="you@example.com" id="fp-email"/></div>
+    <button class="btn-p btn-full" onclick="doForgot()">Send Reset Link</button>
+    <div class="form-msg" id="fp-msg"></div>
+    <p style="text-align:center;margin-top:20px;font-size:13px;color:var(--sub)"><span class="auth-link" onclick="showPage('login')">← Back to sign in</span></p>
+  </div>
+</div>
+</div>
+
+<!-- ═══ QUEUE PAGE ═══ -->
+<div class="page" id="pg-queue">
+<div class="queue-screen">
+  <div class="queue-card" id="queueCard">
+    <h2 class="h2" style="margin-bottom:8px">Choose your mode 🌸</h2>
+    <p style="font-size:14px;color:var(--sub);margin-bottom:4px">Pick the kind of conversation you want to have</p>
+    <div class="mode-picker">
+      <div class="mp" onclick="selMode(this,'🌹 Soulmate')"><span>🌹</span>Soulmate</div>
+      <div class="mp" onclick="selMode(this,'🌊 Deep Talk')"><span>🌊</span>Deep Talk</div>
+      <div class="mp" onclick="selMode(this,'🌱 Friendship')"><span>🌱</span>Friendship</div>
+      <div class="mp" onclick="selMode(this,'🎲 Random')"><span>🎲</span>Random</div>
+      <div class="mp" onclick="selMode(this,'🌍 Global')"><span>🌍</span>Global</div>
+      <div class="mp" onclick="selMode(this,'🔮 AI Mode')"><span>🔮</span>AI Mode</div>
+    </div>
+    <button class="btn-p btn-full" id="startQueueBtn" onclick="startQueue()" style="margin-top:8px">Enter Queue →</button>
+    <p style="font-size:12px;color:var(--sub2);margin-top:14px">Average wait time: <strong style="color:var(--text)">12 seconds</strong> · 2,400+ online now</p>
+  </div>
+</div>
+</div>
+
+<!-- ═══ CHAT DEMO PAGE ═══ -->
+<div class="page" id="pg-chat-demo">
+<div style="padding-top:80px;min-height:100vh">
+  <div class="wrap" style="padding-top:40px;padding-bottom:60px">
+    <div class="center" style="margin-bottom:32px">
+      <button class="btn-s" style="margin-bottom:20px;font-size:13px" onclick="showPage('home')">← Back to home</button>
+      <h2 class="h2" style="margin-bottom:10px">🌸 Demo Chat Session</h2>
+      <p class="sub">This is how SpringMeet feels. Type freely — no sign-up needed to try the demo.</p>
+    </div>
+    <div class="chat-demo" id="chatDemoPage" style="max-width:620px">
+      <div class="cd-header">
+        <div class="cd-user">
+          <div class="cd-av">🌺</div>
+          <div>
+            <div class="cd-name">Sofia · Buenos Aires, Argentina</div>
+            <div class="cd-loc">🌍 Online · 26 years old · Deep Talk Mode</div>
+          </div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:10px;color:var(--sub2);margin-bottom:2px">Session ends in</div>
+          <div class="cd-timer" id="pageTimer">13:22</div>
+        </div>
+      </div>
+      <div class="cd-msgs" id="pageMsgs">
+        <div class="cd-msg cd-in">Hi there! I'm Sofia 🌺 I love deep conversations. What's been on your mind lately that you haven't been able to tell anyone?<div class="cd-meta">Just now · ✓✓</div></div>
+      </div>
+      <div class="cd-input">
+        <input id="pageInput" type="text" placeholder="Be real. Be yourself. Type anything..." onkeypress="if(event.key==='Enter')sendPageMsg()"/>
+        <button class="cd-send" onclick="sendPageMsg()">➤</button>
+      </div>
+      <div class="cd-acc">
+        <button class="cd-acc-btn cab-y" onclick="showModal('acceptModal')">❤️ Accept Sofia</button>
+        <button class="cd-acc-btn cab-n" onclick="showToast('Finding next stranger... 🌸')">Skip & Meet Next →</button>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:24px">
+      <p style="font-size:13px;color:var(--sub2);margin-bottom:16px">Ready to meet real people from around the world?</p>
+      <button class="btn-p" onclick="showPage('signup')">🌸 Sign Up Free & Start Meeting</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ CONTACT PAGE ═══ -->
+<div class="page" id="pg-contact">
+<div style="padding-top:80px;min-height:100vh">
+  <div class="wrap" style="padding-top:60px;padding-bottom:80px">
+    <div style="margin-bottom:16px"><button class="btn-s" style="font-size:13px" onclick="showPage('home')">← Back to home</button></div>
+    <div class="center mb8">
+      <span class="tag">Get in touch</span>
+      <h1 class="h2" style="margin-bottom:14px">Contact Us 🌸</h1>
+      <p class="sub" style="max-width:500px;margin:0 auto">Have a question, suggestion, or need help? We'd love to hear from you. Reach out directly or fill the form.</p>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <h3 class="h3" style="margin-bottom:20px">Reach us directly</h3>
+        <a class="contact-item" href="mailto:aittezazahmad@gmail.com">
+          <div class="ci-icon" style="background:rgba(255,107,157,.15)">📧</div>
+          <div><div class="ci-label">Email</div><div class="ci-val">aittezazahmad@gmail.com</div></div>
+        </a>
+        <a class="contact-item" href="tel:+923419098201">
+          <div class="ci-icon" style="background:rgba(52,211,153,.15)">📞</div>
+          <div><div class="ci-label">Phone / WhatsApp</div><div class="ci-val">+92 341 909 8201</div></div>
+        </a>
+        <a class="contact-item" href="https://wa.me/923419098201" target="_blank">
+          <div class="ci-icon" style="background:rgba(52,211,153,.15)">💬</div>
+          <div><div class="ci-label">WhatsApp</div><div class="ci-val">Chat with Aittezaz directly</div></div>
+        </a>
+        <div class="contact-item" style="cursor:default">
+          <div class="ci-icon" style="background:rgba(96,165,250,.15)">👤</div>
+          <div><div class="ci-label">Founder</div><div class="ci-val">Aittezaz Ahmad</div></div>
+        </div>
+        <div style="margin-top:24px;padding:20px;background:rgba(255,107,157,.06);border:1px solid rgba(255,107,157,.12);border-radius:16px">
+          <div style="font-size:14px;font-weight:600;margin-bottom:8px">⏱️ Response time</div>
+          <p style="font-size:13px;color:var(--sub);line-height:1.6">We typically respond within 24 hours. For urgent safety concerns, we aim to respond within 2 hours.</p>
+        </div>
+      </div>
+      <div>
+        <h3 class="h3" style="margin-bottom:20px">Send a message</h3>
+        <div class="card">
+          <div class="form-group"><label>Your Name</label><input type="text" id="ct-name" placeholder="Your full name"/></div>
+          <div class="form-group"><label>Email Address</label><input type="email" id="ct-email" placeholder="you@example.com"/></div>
+          <div class="form-group">
+            <label>Topic</label>
+            <select id="ct-topic">
+              <option>General question</option>
+              <option>Report a problem</option>
+              <option>Safety concern</option>
+              <option>Account issue</option>
+              <option>Partnership / Business</option>
+              <option>Feature suggestion</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Message</label><textarea id="ct-msg" placeholder="Tell us how we can help you..."></textarea></div>
+          <button class="btn-p btn-full" onclick="doContact()">Send Message →</button>
+          <div class="form-msg" id="ct-resp"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ ABOUT PAGE ═══ -->
+<div class="page" id="pg-about">
+<div style="padding-top:80px;min-height:100vh">
+  <div class="wrap-sm" style="padding-top:60px;padding-bottom:80px">
+    <button class="btn-s" style="font-size:13px;margin-bottom:32px" onclick="showPage('home')">← Back to home</button>
+    <span class="tag">About SpringMeet</span>
+    <h1 class="h2" style="margin-bottom:24px">About SpringMeet</h1>
+    <div class="card" style="margin-bottom:20px">
+      <h3 class="h3">Our Story</h3>
+      <p style="font-size:14px;color:var(--sub);line-height:1.8">SpringMeet was born from a simple belief: that the most meaningful connections happen when we're forced to be present and real. In a world of endless scrolling and ghosting, we wanted to create something different — a place where every conversation matters because it has a beginning, a middle, and either a permanent bond or a clean goodbye.<br><br>The 15-minute timer isn't a gimmick. It's a design principle. Scarcity creates value. When you know this conversation might vanish, you stop overthinking and start being yourself.</p>
+    </div>
+    <div class="card" style="margin-bottom:20px">
+      <h3 class="h3">The Founder</h3>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+        <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--bloom),var(--petal));display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">🌸</div>
+        <div><div style="font-size:16px;font-weight:600">Aittezaz Ahmad</div><div style="font-size:13px;color:var(--sub)">Founder &amp; Builder · Pakistan 🇵🇰</div></div>
+      </div>
+      <p style="font-size:14px;color:var(--sub);line-height:1.8">Aittezaz built SpringMeet because he believes the world becomes a better place when people talk to each other across borders, cultures, and differences. One conversation at a time.<br><br>Contact: <a href="mailto:aittezazahmad@gmail.com" style="color:var(--bloom)">aittezazahmad@gmail.com</a> · <a href="tel:+923419098201" style="color:var(--bloom)">+92 341 909 8201</a></p>
+    </div>
+    <div class="card">
+      <h3 class="h3">Our Values</h3>
+      <div class="gap-v" style="margin-top:12px">
+        <div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:20px">🌸</span><div><div style="font-weight:600;font-size:14px">Real over perfect</div><div style="font-size:13px;color:var(--sub)">We design for authentic human moments, not polished presentations.</div></div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:20px">🛡️</span><div><div style="font-weight:600;font-size:14px">Safety without surveillance</div><div style="font-size:13px;color:var(--sub)">We protect users without becoming a surveillance platform. Expired chats are gone forever.</div></div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:20px">🌍</span><div><div style="font-weight:600;font-size:14px">Borders are just lines</div><div style="font-size:13px;color:var(--sub)">We believe a person from Seoul and a person from Cairo can change each other's lives in 15 minutes.</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ PRIVACY PAGE ═══ -->
+<div class="page" id="pg-privacy">
+<div style="padding-top:80px;min-height:100vh">
+  <div class="wrap-sm" style="padding-top:60px;padding-bottom:80px">
+    <button class="btn-s" style="font-size:13px;margin-bottom:32px" onclick="showPage('home')">← Back</button>
+    <span class="tag">Legal</span>
+    <h1 class="h2" style="margin-bottom:8px">Privacy Policy</h1>
+    <p style="font-size:13px;color:var(--sub2);margin-bottom:32px">Last updated: January 2025</p>
+    <div class="card" style="margin-bottom:16px"><h3 class="h3">Data we collect</h3><p style="font-size:13px;color:var(--sub);line-height:1.8">We collect your email, username, country, age, and optional profile details. We collect conversation metadata (timestamps, session outcomes) but NOT expired chat content — that is permanently deleted. We collect abuse/moderation events to keep the platform safe.</p></div>
+    <div class="card" style="margin-bottom:16px"><h3 class="h3">How we use your data</h3><p style="font-size:13px;color:var(--sub);line-height:1.8">To match you with other users, to protect the community through moderation, to send you important account notifications, and to improve the product. We never sell your data to advertisers or third parties.</p></div>
+    <div class="card" style="margin-bottom:16px"><h3 class="h3">Expired conversations</h3><p style="font-size:13px;color:var(--sub);line-height:1.8">When a timed session expires without mutual acceptance, all message content is permanently and irreversibly deleted from our servers. Only metadata (session existed, outcome: expired) is retained for safety analytics.</p></div>
+    <div class="card" style="margin-bottom:16px"><h3 class="h3">Your rights</h3><p style="font-size:13px;color:var(--sub);line-height:1.8">You can request your data, correct it, or delete your account at any time from Settings. Account deletion removes all personal data within 30 days. Contact us: <a href="mailto:aittezazahmad@gmail.com" style="color:var(--bloom)">aittezazahmad@gmail.com</a></p></div>
+    <div class="card"><h3 class="h3">Contact</h3><p style="font-size:13px;color:var(--sub);line-height:1.8">Aittezaz Ahmad · <a href="mailto:aittezazahmad@gmail.com" style="color:var(--bloom)">aittezazahmad@gmail.com</a> · +92 341 909 8201</p></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ TERMS PAGE ═══ -->
+<div class="page" id="pg-terms">
+<div style="padding-top:80px;min-height:100vh">
+  <div class="wrap-sm" style="padding-top:60px;padding-bottom:80px">
+    <button class="btn-s" style="font-size:13px;margin-bottom:32px" onclick="showPage('home')">← Back</button>
+    <span class="tag">Legal</span>
+    <h1 class="h2" style="margin-bottom:8px">Terms of Service</h1>
+    <p style="font-size:13px;color:var(--sub2);margin-bottom:32px">Last updated: January 2025</p>
+    <div class="card" style="margin-bottom:16px"><h3 class="h3">Age requirement</h3><p style="font-size:13px;color:var(--sub);line-height:1.8">SpringMeet is strictly for users aged 18 and above. By signing up, you confirm that you are at least 18 years old. Users who misrepresent their age will be permanently banned.</p></div>
+    <div class="card" style="margin-bottom:16px"><h3 class="h3">Acceptable use</h3><p style="font-size:13px;color:var(--sub);line-height:1.8">You agree not to: harass, threaten, or abuse other users; send spam or illegal content; impersonate others; attempt to circumvent moderation; or use the platform for commercial solicitation. Violations result in warnings, suspension, or permanent ban.</p></div>
+    <div class="card" style="margin-bottom:16px"><h3 class="h3">Timed conversations</h3><p style="font-size:13px;color:var(--sub);line-height:1.8">You understand that conversations without mutual acceptance are permanently deleted at session expiry. SpringMeet is not responsible for lost connections — the system works as designed.</p></div>
+    <div class="card" style="margin-bottom:16px"><h3 class="h3">Safety</h3><p style="font-size:13px;color:var(--sub);line-height:1.8">You agree to report harmful content using the report feature. SpringMeet reserves the right to terminate accounts that violate community standards, with or without prior warning for severe violations.</p></div>
+    <div class="card"><h3 class="h3">Contact</h3><p style="font-size:13px;color:var(--sub);line-height:1.8">Questions about these terms: <a href="mailto:aittezazahmad@gmail.com" style="color:var(--bloom)">aittezazahmad@gmail.com</a></p></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ SAFETY CENTER PAGE ═══ -->
+<div class="page" id="pg-safety-page">
+<div style="padding-top:80px;min-height:100vh">
+  <div class="wrap-sm" style="padding-top:60px;padding-bottom:80px">
+    <button class="btn-s" style="font-size:13px;margin-bottom:32px" onclick="showPage('home')">← Back</button>
+    <span class="tag" style="color:var(--leaf)">Safety Center</span>
+    <h1 class="h2" style="margin-bottom:24px">Your Safety Matters</h1>
+    <div class="card" style="margin-bottom:16px;border-color:rgba(52,211,153,.2)">
+      <h3 class="h3">Report someone</h3>
+      <p style="font-size:13px;color:var(--sub);line-height:1.8;margin-bottom:16px">If someone makes you uncomfortable, use the Report button during any conversation. Reports are reviewed by our human moderation team within hours.</p>
+      <div class="form-group"><label>Describe the issue</label><textarea placeholder="What happened? Please provide as much detail as possible..."></textarea></div>
+      <button class="btn-p btn-full" onclick="showToast('Report submitted. Thank you for keeping SpringMeet safe. 🛡️')">Submit Report</button>
+    </div>
+    <div class="card" style="margin-bottom:16px"><h3 class="h3">Emergency contacts</h3><p style="font-size:13px;color:var(--sub);line-height:1.8">If you believe someone is in immediate danger, contact your local emergency services. For safety concerns within SpringMeet: <a href="mailto:aittezazahmad@gmail.com" style="color:var(--bloom)">aittezazahmad@gmail.com</a> or <a href="tel:+923419098201" style="color:var(--bloom)">+92 341 909 8201</a></p></div>
+    <div class="card"><h3 class="h3">Safety tips</h3>
+      <div class="gap-v" style="margin-top:12px">
+        <div style="display:flex;gap:10px"><span>✅</span><span style="font-size:13px;color:var(--sub)">Never share personal information like your full name, address, phone number, or financial details in a timed chat.</span></div>
+        <div style="display:flex;gap:10px"><span>✅</span><span style="font-size:13px;color:var(--sub)">Trust your instincts. If something feels wrong, end the session and report the user.</span></div>
+        <div style="display:flex;gap:10px"><span>✅</span><span style="font-size:13px;color:var(--sub)">Use the Block feature — blocked users can never be matched with you again.</span></div>
+        <div style="display:flex;gap:10px"><span>✅</span><span style="font-size:13px;color:var(--sub)">Remember: expired chats are deleted. Accepted connections move to your inbox under your control.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ ACCEPT MODAL ═══ -->
+<div class="modal-overlay" id="acceptModal" onclick="if(event.target===this)closeModal('acceptModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('acceptModal')">✕</button>
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:48px;margin-bottom:12px">🎉</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:8px">It's a Match!</h2>
+      <p style="font-size:14px;color:var(--sub);line-height:1.7">You both accepted each other! This conversation is now saved permanently in your inbox. Keep chatting, share more, or even call each other.</p>
+    </div>
+    <div style="background:rgba(255,107,157,.07);border:1px solid rgba(255,107,157,.15);border-radius:14px;padding:16px;margin-bottom:20px;text-align:center">
+      <div style="font-size:13px;color:var(--sub2);margin-bottom:4px">Matched with</div>
+      <div style="font-size:16px;font-weight:600">Sofia · Buenos Aires, Argentina 🌺</div>
+      <div style="font-size:12px;color:var(--sub);margin-top:4px">Deep Talk Mode · Matched January 2025</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="btn-p btn-full" onclick="closeModal('acceptModal');showPage('signup')">🌸 Sign Up to Save This Chat</button>
+      <button class="btn-s btn-full" onclick="closeModal('acceptModal')">Continue Chatting</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const pages={
+  'home':'pg-home','signup':'pg-signup','login':'pg-login','forgot':'pg-forgot',
+  'queue':'pg-queue','chat-demo':'pg-chat-demo','contact':'pg-contact','about':'pg-about',
+  'privacy':'pg-privacy','terms':'pg-terms','safety-page':'pg-safety-page'
+};
+
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const pg=document.getElementById(pages[name]);
+  if(pg){pg.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+  closeMobile();
+}
+
+function scrollTo(sel){
+  showPage('home');
+  setTimeout(()=>{
+    const el=document.querySelector(sel);
+    if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+  },100);
+}
+
+function toggleMobile(){document.getElementById('mobileMenu').classList.toggle('open')}
+function closeMobile(){document.getElementById('mobileMenu').classList.remove('open')}
+
+function showModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// PARTICLES
+const sc=document.getElementById('sparks');
+const cols=['#FF6B9D','#C084FC','#FFB347','#34D399','#60A5FA'];
+for(let i=0;i<45;i++){
+  const s=document.createElement('div');s.className='spark';
+  const c=cols[i%cols.length];
+  const sz=2+Math.random()*4;
+  s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;background:${c};width:${sz}px;height:${sz}px;animation-delay:${Math.random()*12}s;animation-duration:${9+Math.random()*14}s`;
+  sc.appendChild(s);
+}
+
+// HERO TIMER
+let heroSecs=754;
+setInterval(()=>{
+  heroSecs--;if(heroSecs<0)heroSecs=754;
+  const el=document.getElementById('heroTimer');
+  if(el)el.textContent=`${String(Math.floor(heroSecs/60)).padStart(2,'0')}:${String(heroSecs%60).padStart(2,'0')}`;
+},1000);
+
+// DEMO TIMER
+let demoSecs=892,pageTimerSecs=802;
+setInterval(()=>{
+  demoSecs--;if(demoSecs<0)demoSecs=892;
+  pageTimerSecs--;if(pageTimerSecs<0)pageTimerSecs=802;
+  const d=document.getElementById('demoTimer'),p=document.getElementById('pageTimer');
+  if(d)d.textContent=`${String(Math.floor(demoSecs/60)).padStart(2,'0')}:${String(demoSecs%60).padStart(2,'0')}`;
+  if(p)p.textContent=`${String(Math.floor(pageTimerSecs/60)).padStart(2,'0')}:${String(pageTimerSecs%60).padStart(2,'0')}`;
+},1000);
+
+// SCROLL REVEAL
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+// FAQ
+document.querySelectorAll('.faq-q').forEach(q=>q.addEventListener('click',function(){
+  const item=this.closest('.faq-item');
+  const wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen)item.classList.add('open');
+}));
+
+// DEMO CHAT
+const demoReplies=[
+  "That's so interesting! I've never thought about it that way 🌿",
+  "Honestly same... it's like we've been thinking the same things 😊",
+  "Haha you're really funny! I wasn't expecting that 😂",
+  "Wait, really? Tell me more about that! I'm genuinely curious 👀",
+  "That's deep. I think I needed to hear that today actually...",
+  "You're surprisingly easy to talk to. Most people aren't like this 🌸",
+  "I feel like we could talk for hours. The timer is going too fast!",
+  "That's a really beautiful way to see it. You're wise 💫",
+  "I love that answer! Where are you from? I want to know everything haha",
+  "Okay I'm definitely clicking Accept. This conversation is too good to lose 🥺"
+];
+let demoIdx=0;
+
+function sendDemoMsg(){
+  const input=document.getElementById('demoInput');
+  const msgs=document.getElementById('demoMsgs');
+  const val=input.value.trim();
+  if(!val)return;
+  const outMsg=document.createElement('div');
+  outMsg.className='cd-msg cd-out';
+  outMsg.innerHTML=val+'<div class="cd-meta">Just now · ✓</div>';
+  msgs.appendChild(outMsg);
+  input.value='';
+  msgs.scrollTop=msgs.scrollHeight;
+  const typing=document.createElement('div');
+  typing.className='typing';
+  typing.innerHTML='<span></span><span></span><span></span>';
+  msgs.appendChild(typing);
+  setTimeout(()=>{
+    typing.remove();
+    const rep=document.createElement('div');
+    rep.className='cd-msg cd-in';
+    rep.innerHTML=demoReplies[demoIdx%demoReplies.length]+'<div class="cd-meta">Just now · ✓✓</div>';
+    demoIdx++;
+    msgs.appendChild(rep);
+    msgs.scrollTop=msgs.scrollHeight;
+  },1400+Math.random()*800);
+}
+
+function sendPageMsg(){
+  const input=document.getElementById('pageInput');
+  const msgs=document.getElementById('pageMsgs');
+  const val=input.value.trim();
+  if(!val)return;
+  const outMsg=document.createElement('div');
+  outMsg.className='cd-msg cd-out';
+  outMsg.innerHTML=val+'<div class="cd-meta">Just now · ✓</div>';
+  msgs.appendChild(outMsg);
+  input.value='';
+  msgs.scrollTop=msgs.scrollHeight;
+  const typing=document.createElement('div');
+  typing.className='typing';
+  typing.innerHTML='<span></span><span></span><span></span>';
+  msgs.appendChild(typing);
+  setTimeout(()=>{
+    typing.remove();
+    const rep=document.createElement('div');
+    rep.className='cd-msg cd-in';
+    rep.innerHTML=demoReplies[demoIdx%demoReplies.length]+'<div class="cd-meta">Just now · ✓✓</div>';
+    demoIdx++;
+    msgs.appendChild(rep);
+    msgs.scrollTop=msgs.scrollHeight;
+  },1400+Math.random()*800);
+}
+
+function demoAccept(){showModal('acceptModal')}
+function demoSkip(){showToast('Finding next stranger... 🌸');setTimeout(()=>showPage('signup'),1500)}
+
+// QUEUE MODE SELECT
+let selectedMode='';
+function selMode(el,mode){
+  document.querySelectorAll('.mp').forEach(m=>m.classList.remove('sel'));
+  el.classList.add('sel');selectedMode=mode;
+}
+
+let queueState=false;
+function startQueue(){
+  if(!selectedMode){showToast('Please select a conversation mode first 🌸');return;}
+  const card=document.getElementById('queueCard');
+  card.innerHTML=`
+    <div style="margin-bottom:20px"><span class="badge bv">${selectedMode}</span></div>
+    <div class="queue-ring"></div>
+    <h2 class="h2" style="margin-bottom:10px">Finding your match...</h2>
+    <p style="font-size:14px;color:var(--sub);margin-bottom:8px">Searching ${Math.floor(Math.random()*800+1200)} people in the queue</p>
+    <p style="font-size:12px;color:var(--sub2)">Usually takes 5–30 seconds 🌸</p>
+    <button class="btn-s btn-full" style="margin-top:28px;font-size:13px" onclick="cancelQueue()">Cancel</button>
+  `;
+  setTimeout(()=>foundMatch(),3500+Math.random()*2000);
+}
+
+function foundMatch(){
+  const names=[['Luna','Amsterdam','🦋'],['Kai','Seoul','🌿'],['Sofia','Buenos Aires','🌺'],['Alex','London','⭐'],['Yuki','Tokyo','🌸'],['Amir','Dubai','🌟'],['Zara','Cairo','🌹'],['Emma','Berlin','🌻']];
+  const n=names[Math.floor(Math.random()*names.length)];
+  const card=document.getElementById('queueCard');
+  card.innerHTML=`
+    <div class="match-screen">
+      <div class="match-anim">🌸</div>
+      <h2 class="h2" style="margin-bottom:8px">Match found!</h2>
+      <div style="display:flex;align-items:center;gap:14px;margin:10px 0">
+        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--bloom),var(--petal));display:flex;align-items:center;justify-content:center;font-size:20px">${n[2]}</div>
+        <div class="conn-line"><div class="conn-dot"></div><div class="conn-bar"></div><div class="conn-dot2"></div></div>
+        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--petal),var(--sky));display:flex;align-items:center;justify-content:center;font-size:18px">👤</div>
+      </div>
+      <p style="font-size:15px;font-weight:600">${n[0]} from ${n[1]}</p>
+      <p style="font-size:13px;color:var(--sub)">Your 15-minute conversation starts now!</p>
+      <div style="display:flex;flex-direction:column;gap:10px;width:100%;margin-top:8px">
+        <button class="btn-p btn-full" onclick="showPage('chat-demo')">🌸 Start Chatting →</button>
+        <button class="btn-s btn-full" style="font-size:13px" onclick="showPage('queue')">Skip this match</button>
+      </div>
+    </div>
+  `;
+}
+
+function cancelQueue(){showPage('queue')}
+
+// SIGNUP
+function doSignup(){
+  const name=document.getElementById('su-fname').value;
+  const email=document.getElementById('su-email').value;
+  const pass=document.getElementById('su-pass').value;
+  const pass2=document.getElementById('su-pass2').value;
+  const dob=document.getElementById('su-dob').value;
+  const tos=document.getElementById('cb-tos').checked;
+  const safe=document.getElementById('cb-safe').checked;
+  const msg=document.getElementById('su-msg');
+  msg.style.display='none';
+  if(!name||!email||!pass||!pass2||!dob){showFormMsg('su-msg','err','Please fill in all required fields.');return}
+  if(pass!==pass2){showFormMsg('su-msg','err','Passwords do not match.');return}
+  if(pass.length<8){showFormMsg('su-msg','err','Password must be at least 8 characters.');return}
+  const age=(new Date()-new Date(dob))/(1000*60*60*24*365.25);
+  if(age<18){showFormMsg('su-msg','err','You must be 18 or older to use SpringMeet.');return}
+  if(!tos||!safe){showFormMsg('su-msg','err','Please accept the Terms of Service and community pledge.');return}
+  showFormMsg('su-msg','ok','🌸 Account created! Check your email to verify your account.');
+  setTimeout(()=>{showPage('queue');showToast('Welcome to SpringMeet! Let\'s find your first match 🌸')},1800);
+}
+
+// LOGIN
+function doLogin(){
+  const email=document.getElementById('li-email').value;
+  const pass=document.getElementById('li-pass').value;
+  if(!email||!pass){showFormMsg('li-msg','err','Please enter your email and password.');return}
+  if(!email.includes('@')){showFormMsg('li-msg','err','Please enter a valid email address.');return}
+  showFormMsg('li-msg','ok','✓ Signing you in...');
+  setTimeout(()=>{showPage('queue');showToast('Welcome back to SpringMeet! 🌸')},1200);
+}
+
+// FORGOT
+function doForgot(){
+  const email=document.getElementById('fp-email').value;
+  if(!email||!email.includes('@')){showFormMsg('fp-msg','err','Please enter a valid email address.');return}
+  showFormMsg('fp-msg','ok','📧 Reset link sent to '+email+'. Check your inbox!');
+}
+
+// CONTACT
+function doContact(){
+  const name=document.getElementById('ct-name').value;
+  const email=document.getElementById('ct-email').value;
+  const msg=document.getElementById('ct-msg').value;
+  if(!name||!email||!msg){showFormMsg('ct-resp','err','Please fill in all fields.');return}
+  if(!email.includes('@')){showFormMsg('ct-resp','err','Please enter a valid email address.');return}
+  showFormMsg('ct-resp','ok','✅ Message sent! Aittezaz will reply to '+email+' within 24 hours.');
+  document.getElementById('ct-name').value='';
+  document.getElementById('ct-email').value='';
+  document.getElementById('ct-msg').value='';
+}
+
+function showFormMsg(id,type,text){
+  const el=document.getElementById(id);
+  el.className='form-msg '+(type==='ok'?'form-ok':'form-err');
+  el.textContent=text;
+  el.style.display='block';
+}
+
+// PASSWORD STRENGTH
+function checkStrength(p){
+  const fill=document.getElementById('strengthFill');
+  const label=document.getElementById('strengthLabel');
+  if(!fill)return;
+  let score=0,color='',text='';
+  if(p.length>=8)score++;
+  if(/[A-Z]/.test(p))score++;
+  if(/[0-9]/.test(p))score++;
+  if(/[^A-Za-z0-9]/.test(p))score++;
+  if(score===0){fill.style.width='0%';label.textContent='Enter password';return}
+  if(score===1){fill.style.width='25%';fill.style.background='#EF4444';label.textContent='Weak'}
+  else if(score===2){fill.style.width='50%';fill.style.background='#F97316';label.textContent='Fair'}
+  else if(score===3){fill.style.width='75%';fill.style.background='#EAB308';label.textContent='Good'}
+  else{fill.style.width='100%';fill.style.background='var(--leaf)';label.textContent='Strong ✓'}
+}
+</script>
+</body>
+</html>
