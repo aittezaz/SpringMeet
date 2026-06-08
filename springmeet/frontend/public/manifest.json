@@ -1,0 +1,21 @@
+{
+  "name": "SpringMeet",
+  "short_name": "SpringMeet",
+  "description": "Make spring all over the world. Meet strangers in 15-minute timed conversations.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080C17",
+  "theme_color": "#FF6B9D",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/icons/icon-72.png", "sizes": "72x72", "type": "image/png" },
+    { "src": "/icons/icon-96.png", "sizes": "96x96", "type": "image/png" },
+    { "src": "/icons/icon-128.png", "sizes": "128x128", "type": "image/png" },
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "categories": ["social", "communication"],
+  "screenshots": [
+    { "src": "/screenshots/mobile.png", "sizes": "390x844", "type": "image/png", "form_factor": "narrow" }
+  ]
+}

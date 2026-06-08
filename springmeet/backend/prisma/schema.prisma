@@ -1,0 +1,463 @@
+// SpringMeet Database Schema
+// Run: npx prisma migrate dev --name init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+  PENDING_VERIFICATION
+}
+
+enum MatchMode {
+  SOULMATE
+  DEEP_TALK
+  FRIENDSHIP
+  RANDOM
+  GLOBAL
+  AI_ICEBREAKER
+}
+
+enum SessionStatus {
+  ACTIVE
+  EXPIRED
+  MUTUALLY_ACCEPTED
+  SKIPPED
+}
+
+enum MessageStatus {
+  SENT
+  DELIVERED
+  READ
+}
+
+enum CallStatus {
+  RINGING
+  ACTIVE
+  ENDED
+  REJECTED
+  MISSED
+}
+
+enum CallType {
+  VOICE
+  VIDEO
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  RESOLVED
+  DISMISSED
+}
+
+enum WarningLevel {
+  FIRST
+  SECOND
+  THIRD
+}
+
+enum NotificationType {
+  NEW_MATCH
+  MATCH_ACCEPTED
+  NEW_MESSAGE
+  CALL_INCOMING
+  CALL_MISSED
+  ACCOUNT_WARNING
+  ACCOUNT_SUSPENDED
+  ACCOUNT_BANNED
+  REPORT_RESOLVED
+  SYSTEM
+}
+
+model User {
+  id                String     @id @default(cuid())
+  email             String     @unique
+  username          String     @unique
+  displayName       String
+  passwordHash      String
+  role              UserRole   @default(USER)
+  status            UserStatus @default(PENDING_VERIFICATION)
+  emailVerified     Boolean    @default(false)
+  emailVerifyToken  String?
+  passwordResetToken String?
+  passwordResetExpiry DateTime?
+  dateOfBirth       DateTime
+  country           String
+  gender            String?
+  bio               String?    @db.Text
+  avatarUrl         String?
+  trustScore        Int        @default(100)
+  totalMatches      Int        @default(0)
+  totalAccepted     Int        @default(0)
+  referralCode      String     @unique @default(cuid())
+  referredBy        String?
+  isOnline          Boolean    @default(false)
+  lastSeen          DateTime   @default(now())
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  profile           Profile?
+  settings          UserSettings?
+  queueEntry        MatchQueue?
+  sessionsAsUser1   TimedSession[] @relation("User1Sessions")
+  sessionsAsUser2   TimedSession[] @relation("User2Sessions")
+  acceptedAsUser1   AcceptedChat[] @relation("AcceptedUser1")
+  acceptedAsUser2   AcceptedChat[] @relation("AcceptedUser2")
+  messagesSent      Message[]      @relation("MessageSender")
+  callsMade         Call[]         @relation("CallCaller")
+  callsReceived     Call[]         @relation("CallReceiver")
+  reportsSubmitted  Report[]       @relation("ReportSubmitter")
+  reportsReceived   Report[]       @relation("ReportedUser")
+  warnings          Warning[]
+  blocksGiven       Block[]        @relation("BlockingUser")
+  blocksReceived    Block[]        @relation("BlockedUser")
+  notifications     Notification[]
+  loginSessions     LoginSession[]
+  adminActions      AdminAction[]  @relation("AdminActor")
+  referrals         Referral[]     @relation("ReferralInviter")
+  referralUsed      Referral?      @relation("ReferralJoiner")
+  moderationEvents  ModerationEvent[]
+  analyticsEvents   AnalyticsEvent[]
+
+  @@index([email])
+  @@index([username])
+  @@index([status])
+  @@index([trustScore])
+  @@map("users")
+}
+
+model Profile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  interests       String[] @default([])
+  languages       String[] @default(["English"])
+  conversationVibe String?
+  matchModePreference MatchMode @default(RANDOM)
+  introText       String?  @db.Text
+  region          String?
+  isProfilePublic Boolean  @default(true)
+  badges          String[] @default([])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
+}
+
+model UserSettings {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  hideOnlineStatus Boolean  @default(false)
+  disableCalls     Boolean  @default(false)
+  disableReadReceipts Boolean @default(false)
+  allowNotifications Boolean @default(true)
+  emailOnNewMatch  Boolean  @default(true)
+  emailOnMessage   Boolean  @default(true)
+  emailOnCall      Boolean  @default(true)
+  emailOnWarning   Boolean  @default(true)
+  sessionDuration  Int      @default(15) // minutes: 10 or 15
+  preferredLanguage String  @default("en")
+  theme            String   @default("dark")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_settings")
+}
+
+model LoginSession {
+  id           String   @id @default(cuid())
+  userId       String
+  token        String   @unique
+  refreshToken String   @unique
+  ipAddress    String?
+  userAgent    String?
+  expiresAt    DateTime
+  isRevoked    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([refreshToken])
+  @@index([userId])
+  @@map("login_sessions")
+}
+
+model MatchQueue {
+  id        String    @id @default(cuid())
+  userId    String    @unique
+  mode      MatchMode @default(RANDOM)
+  language  String?
+  region    String?
+  interests String[]  @default([])
+  joinedAt  DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([mode])
+  @@index([joinedAt])
+  @@map("match_queue")
+}
+
+model TimedSession {
+  id          String        @id @default(cuid())
+  user1Id     String
+  user2Id     String
+  mode        MatchMode
+  status      SessionStatus @default(ACTIVE)
+  user1Accepted Boolean     @default(false)
+  user2Accepted Boolean     @default(false)
+  startedAt   DateTime      @default(now())
+  expiresAt   DateTime
+  endedAt     DateTime?
+  durationMinutes Int       @default(15)
+  messageCount Int          @default(0)
+
+  user1    User      @relation("User1Sessions", fields: [user1Id], references: [id])
+  user2    User      @relation("User2Sessions", fields: [user2Id], references: [id])
+  messages Message[]
+  reports  Report[]
+  acceptedChat AcceptedChat?
+
+  @@index([user1Id])
+  @@index([user2Id])
+  @@index([status])
+  @@index([expiresAt])
+  @@map("timed_sessions")
+}
+
+model AcceptedChat {
+  id          String   @id @default(cuid())
+  sessionId   String   @unique
+  user1Id     String
+  user2Id     String
+  acceptedAt  DateTime @default(now())
+  isActive    Boolean  @default(true)
+  user1Deleted Boolean @default(false)
+  user2Deleted Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  session  TimedSession  @relation(fields: [sessionId], references: [id])
+  user1    User          @relation("AcceptedUser1", fields: [user1Id], references: [id])
+  user2    User          @relation("AcceptedUser2", fields: [user2Id], references: [id])
+  messages Message[]     @relation("AcceptedChatMessages")
+  calls    Call[]
+
+  @@index([user1Id])
+  @@index([user2Id])
+  @@map("accepted_chats")
+}
+
+model Message {
+  id             String        @id @default(cuid())
+  senderId       String
+  sessionId      String?
+  acceptedChatId String?
+  content        String        @db.Text
+  status         MessageStatus @default(SENT)
+  isDeleted      Boolean       @default(false)
+  isFlagged      Boolean       @default(false)
+  flagReason     String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  sender       User          @relation("MessageSender", fields: [senderId], references: [id])
+  session      TimedSession? @relation(fields: [sessionId], references: [id])
+  acceptedChat AcceptedChat? @relation("AcceptedChatMessages", fields: [acceptedChatId], references: [id])
+
+  @@index([sessionId])
+  @@index([acceptedChatId])
+  @@index([senderId])
+  @@index([createdAt])
+  @@map("messages")
+}
+
+model Call {
+  id             String     @id @default(cuid())
+  callerId       String
+  receiverId     String
+  acceptedChatId String
+  type           CallType   @default(VOICE)
+  status         CallStatus @default(RINGING)
+  startedAt      DateTime?
+  endedAt        DateTime?
+  durationSeconds Int?
+  createdAt      DateTime   @default(now())
+
+  caller       User         @relation("CallCaller", fields: [callerId], references: [id])
+  receiver     User         @relation("CallReceiver", fields: [receiverId], references: [id])
+  acceptedChat AcceptedChat @relation(fields: [acceptedChatId], references: [id])
+
+  @@index([callerId])
+  @@index([receiverId])
+  @@index([acceptedChatId])
+  @@map("calls")
+}
+
+model Report {
+  id          String       @id @default(cuid())
+  submitterId String
+  reportedId  String
+  sessionId   String?
+  reason      String
+  description String?      @db.Text
+  status      ReportStatus @default(PENDING)
+  reviewedBy  String?
+  reviewNote  String?      @db.Text
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  submitter User          @relation("ReportSubmitter", fields: [submitterId], references: [id])
+  reported  User          @relation("ReportedUser", fields: [reportedId], references: [id])
+  session   TimedSession? @relation(fields: [sessionId], references: [id])
+
+  @@index([submitterId])
+  @@index([reportedId])
+  @@index([status])
+  @@map("reports")
+}
+
+model Block {
+  id        String   @id @default(cuid())
+  blockerId String
+  blockedId String
+  createdAt DateTime @default(now())
+
+  blocker User @relation("BlockingUser", fields: [blockerId], references: [id])
+  blocked User @relation("BlockedUser", fields: [blockedId], references: [id])
+
+  @@unique([blockerId, blockedId])
+  @@index([blockerId])
+  @@index([blockedId])
+  @@map("blocks")
+}
+
+model Warning {
+  id          String       @id @default(cuid())
+  userId      String
+  level       WarningLevel
+  reason      String
+  description String?      @db.Text
+  issuedBy    String?
+  expiresAt   DateTime?
+  createdAt   DateTime     @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("warnings")
+}
+
+model ModerationEvent {
+  id          String   @id @default(cuid())
+  userId      String
+  sessionId   String?
+  messageId   String?
+  eventType   String   // TOXIC, HARASSMENT, SPAM, THREAT, etc.
+  severity    Int      @default(1) // 1-10
+  content     String?  @db.Text
+  action      String?  // WARNED, FLAGGED, DELETED, etc.
+  aiScore     Float?
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([eventType])
+  @@index([createdAt])
+  @@map("moderation_events")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String
+  data      Json?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+model Referral {
+  id         String   @id @default(cuid())
+  inviterId  String
+  joinerId   String   @unique
+  code       String
+  rewarded   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  inviter User @relation("ReferralInviter", fields: [inviterId], references: [id])
+  joiner  User @relation("ReferralJoiner", fields: [joinerId], references: [id])
+
+  @@index([inviterId])
+  @@map("referrals")
+}
+
+model AdminAction {
+  id          String   @id @default(cuid())
+  adminId     String
+  targetId    String?
+  actionType  String   // BAN, UNBAN, WARN, SUSPEND, RESOLVE_REPORT, etc.
+  details     String?  @db.Text
+  createdAt   DateTime @default(now())
+
+  admin User @relation("AdminActor", fields: [adminId], references: [id])
+
+  @@index([adminId])
+  @@index([targetId])
+  @@map("admin_actions")
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  userId    String?
+  eventName String
+  properties Json?
+  sessionId String?
+  ipHash    String?
+  country   String?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([eventName])
+  @@index([createdAt])
+  @@index([userId])
+  @@map("analytics_events")
+}
+
+model SystemConfig {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@map("system_config")
+}

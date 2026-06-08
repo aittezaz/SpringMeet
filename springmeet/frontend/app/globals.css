@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bloom: #FF6B9D;
+  --petal: #C084FC;
+  --blossom: #FFB347;
+  --leaf: #34D399;
+}
+
+* { -webkit-tap-highlight-color: transparent; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: #080C17;
+  color: #F0F4FF;
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #111827; }
+::-webkit-scrollbar-thumb { background: rgba(255,107,157,0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,107,157,0.5); }
+
+/* Glass card */
+.glass { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); backdrop-filter: blur(20px); }
+
+/* Card helper */
+.card {
+  @apply rounded-3xl border border-white/10 bg-white/5 transition-all duration-300;
+}
+
+/* Gradient text */
+.grad-text {
+  background: linear-gradient(135deg, #FF6B9D 0%, #C084FC 60%, #FFB347 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated orb background */
+.orb-bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.orb { position: absolute; border-radius: 50%; filter: blur(90px); animation: drift 20s ease-in-out infinite; }
+
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(60px, -40px); }
+  66% { transform: translate(-40px, 60px); }
+}
+
+/* Message bubble animations */
+.msg-enter { animation: msgIn 0.3s ease; }
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Timer pulse when < 2 min */
+.timer-urgent { animation: timerPulse 1s ease-in-out infinite; }
+@keyframes timerPulse {
+  0%, 100% { color: #FF6B9D; }
+  50% { color: #ff3d7a; }
+}
+
+/* Loading skeleton */
+.skeleton { background: linear-gradient(90deg, #1F2937 25%, #2D3748 50%, #1F2937 75%); background-size: 200% 100%; animation: skeleton 1.5s infinite; }
+@keyframes skeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+/* Mobile bottom nav */
+@media (max-width: 768px) {
+  .mobile-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; }
+  .has-mobile-nav { padding-bottom: 70px; }
+}
