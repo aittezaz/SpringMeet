@@ -1,0 +1,194 @@
+# 🚀 DEPLOYMENT QUICK REFERENCE
+
+**Print this page and keep it handy during deployment!**
+
+---
+
+## 📌 Step 1: GitHub (5 minutes)
+
+```bash
+cd springmeet
+git add .
+git commit -m "Initial commit: SpringMeet production-ready"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/springmeet.git
+git push -u origin main
+```
+
+✅ Verify: https://github.com/YOUR_USERNAME/springmeet
+
+---
+
+## 🌐 Step 2: VPS + Domain (30 minutes)
+
+### Buy VPS (pick one)
+- **DigitalOcean**: https://digitalocean.com (~$5/mo)
+- **Hetzner**: https://hetzner.com (~€3/mo)
+- **Linode**: https://linode.com (~$5/mo)
+
+**Specs**: Ubuntu 20.04+, 2GB RAM, 20GB disk
+
+### Buy Domain (pick one)
+- **Namecheap**: https://namecheap.com
+- **GoDaddy**: https://godaddy.com
+- **Google Domains**: https://domains.google.com
+
+### Configure DNS
+Set these in your domain registrar:
+
+```
+Type    | Host | Points To
+--------|------|----------
+A       | @    | YOUR_SERVER_IP
+A       | api  | YOUR_SERVER_IP
+```
+
+💡 Wait 5-30 minutes for propagation
+
+---
+
+## 🔐 Step 3: Environment Variables
+
+Generate these before deploying:
+
+```bash
+# Generate passwords and secrets (run on your local machine)
+openssl rand -hex 16   # For POSTGRES_PASSWORD
+openssl rand -hex 16   # For REDIS_PASSWORD
+openssl rand -hex 64   # For JWT_SECRET
+openssl rand -hex 64   # For JWT_REFRESH_SECRET
+
+# Get Gmail App Password
+# 1. Go to https://myaccount.google.com/apppasswords
+# 2. Select Mail → Other → SpringMeet
+# 3. Copy the 16-character password
+```
+
+---
+
+## 🚀 Step 4: Deploy (10 minutes)
+
+### SSH to Server
+```bash
+ssh root@YOUR_SERVER_IP
+```
+
+### Clone & Configure
+```bash
+cd /opt
+git clone https://github.com/YOUR_USERNAME/springmeet.git
+cd springmeet
+
+# Edit environment
+cp .env.example .env
+nano .env  # Or: vi .env
+```
+
+### Fill in .env
+```env
+POSTGRES_PASSWORD=<your_generated_password>
+REDIS_PASSWORD=<your_generated_password>
+JWT_SECRET=<your_generated_64_char_hex>
+JWT_REFRESH_SECRET=<your_generated_64_char_hex>
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=<your_gmail_app_password>
+FRONTEND_URL=https://yourdomain.com
+NEXT_PUBLIC_API_URL=https://api.yourdomain.com
+NEXT_PUBLIC_SOCKET_URL=https://api.yourdomain.com
+NEXT_PUBLIC_APP_URL=https://yourdomain.com
+```
+
+### Update Nginx
+```bash
+sed -i 's/yourdomain.com/YOUR_ACTUAL_DOMAIN.com/g' nginx/nginx.conf
+```
+
+### Deploy!
+```bash
+bash deploy.sh
+```
+
+⏱️ **Wait 3-5 minutes** for services to start
+
+---
+
+## ✅ Verify Deployment
+
+```bash
+# Check services
+docker compose ps
+
+# Test API
+curl https://api.yourdomain.com/api/health
+
+# View logs
+docker compose logs -f backend
+```
+
+### Access Your App
+- **Frontend**: https://yourdomain.com
+- **API**: https://api.yourdomain.com/api/health
+- **Login**: aittezazahmad@gmail.com / Admin@12345!
+
+⚠️ **Change admin password immediately!**
+
+---
+
+## 🆘 Troubleshooting (Quick)
+
+| Problem | Solution |
+|---------|----------|
+| API not responding | `docker compose logs backend` |
+| Blank frontend page | `docker compose logs frontend` |
+| SSL certificate error | Wait 5 min, check `docker compose logs certbot` |
+| Database won't connect | Check `.env` DATABASE_URL, wait 30 sec |
+| Services not starting | `docker compose restart` |
+
+**For more**: See `DEPLOYMENT.md`
+
+---
+
+## 📋 Checklist
+
+### Before Deploying
+- [ ] GitHub repo created and pushed
+- [ ] VPS running (Ubuntu 20.04+)
+- [ ] Domain DNS configured (A records set)
+- [ ] Passwords generated (16-char hex each)
+- [ ] JWT secrets generated (64-char hex each)
+- [ ] Gmail App Password obtained
+- [ ] SSH access to VPS verified
+
+### During Deployment
+- [ ] Cloned repo on VPS
+- [ ] `.env` file filled completely
+- [ ] Nginx config updated with domain
+- [ ] `bash deploy.sh` executed
+- [ ] Waited 3-5 minutes for startup
+
+### After Deployment
+- [ ] Can visit https://yourdomain.com
+- [ ] API health check works
+- [ ] Can login with admin account
+- [ ] Changed admin password
+- [ ] Removed test user accounts
+
+---
+
+## 📞 Contact
+
+- **Email**: aittezazahmad@gmail.com
+- **Phone**: +92 341 909 8201
+- **Full Guides**: See README.md and DEPLOYMENT.md
+
+---
+
+## 🌸 You're Live!
+
+Congratulations! SpringMeet is running on your server.
+
+**Next**: Share your domain, monitor logs, scale as needed.
+
+---
+
+**Print this and keep it handy!** 📄
